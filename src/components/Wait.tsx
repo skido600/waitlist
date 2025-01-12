@@ -6,7 +6,7 @@ export default function Wait() {
       <div className="h-[43rem]  font-poppins  w-full dark:bg-black  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex items-center justify-center">
         {/* Radial gradient for the container to give a faded look */}
         <div className="absolute pointer-events-none  flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-        <main className="text-center px-2 mb-8  w-[315px] md:w-[500px] lg:w-[680px] mt-12 sm:-mt-[2.5rem]">
+        <main className="text-center  mb-8  w-[315px] md:w-[500px] lg:w-[680px] mt-12 sm:-mt-[2.5rem]">
           <div className="text-[70px]  tracking-[-1px] font-bold mb-4 m-auto font-inter md:flex justify-center gap-x-4  ">
             <p> Wave</p>
             <p className="text-[#8A2BE2] mt-[-2rem]  md:mt-0 animate-color-change">
