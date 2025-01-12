@@ -1,33 +1,79 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { ref, push } from "firebase/database";
+import { NextResponse } from "next/server";
 import { database } from "../../../../lib/firebase";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
-type Data = {
-  message?: string;
-  error?: string;
-};
+// Email validation function
+const isValidEmail = (email: string): boolean =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  if (req.method === "POST") {
-    const { email }: { email: string } = req.body;
+// Define your allowed origin
+// const ALLOWED_ORIGIN = "http://localhost:3000";
 
-    if (!email || !email.includes("@")) {
-      return res.status(400).json({ error: "Invalid email address" });
+export async function POST(request: Request) {
+  //   const origin = request.headers.get("origin");
+  //   console.log(origin);
+  // Check if the request comes from the allowed origin
+  //   if (origin !== ALLOWED_ORIGIN) {
+  //     return NextResponse.json(
+  //       { error: "Something went wrong." },
+  //       { status: 403 }
+  //     );
+  //   }
+
+  try {
+    const { email } = await request.json();
+
+    // Validate email
+    if (!email || !isValidEmail(email)) {
+      return NextResponse.json(
+        { error: "A valid email is required" },
+        { status: 400 }
+      );
     }
 
-    try {
-      const emailsRef = ref(database, "waitlist");
-      await push(emailsRef, { email, timestamp: Date.now() });
+    // Check if the email is already in the waitlist
+    const emailQuery = query(
+      collection(database, "waitlist"),
+      where("email", "==", email)
+    );
+    const existingEmails = await getDocs(emailQuery);
 
-      return res.status(200).json({ message: "Email added to waitlist" });
-    } catch (error) {
-      console.error("Error adding email:", error);
-      return res.status(500).json({ error: "Failed to save email" });
+    if (!existingEmails.empty) {
+      return NextResponse.json(
+        {
+          error: "This email is already on our waitlist. Try a different one.",
+        },
+        { status: 409 }
+      );
     }
-  } else {
-    return res.status(405).json({ error: "Method not allowed" });
+
+    // Add the email to the waitlist
+    await addDoc(collection(database, "waitlist"), {
+      email,
+      timestamp: serverTimestamp(),
+    });
+
+    return NextResponse.json(
+      {
+        message: "Email added successfully!",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error adding email to waitlist:", error);
+
+    return NextResponse.json(
+      {
+        error: "There was a problem adding your email. Please try again later.",
+      },
+      { status: 500 }
+    );
   }
 }
