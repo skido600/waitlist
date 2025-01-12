@@ -1,25 +1,28 @@
+"use client";
 import { FaPen } from "react-icons/fa";
 export default function Nav() {
   return (
     <>
       <main>
-        <nav className="flex items-center justify-around py-4">
-          <div className="flex items-center gap-x-3">
+        <nav className="flex items-center justify-between md:px-8 px-2 py-4 fixed right-0 left-0">
+          <div className="flex items-center gap-2">
             <div>
-              <FaPen className="text-[#6898A6]" />
+              <FaPen className="text-[#8A2BE2]" size={10} type="icon" />
             </div>
             <div>
               <p className="text-[13px] font-bold">
-                Rewrite{" "}
-                <span className="text-[#6898A6] font-inter">Thing.</span>
+                Wave <span className="text-[#8A2BE2] font-inter">Queue</span>
               </p>
             </div>
           </div>
 
           <article>
-            <button className="hover:bg-[#F1F5F9] border py-2 bg-white rounded-[5px] px-3 text-[14px] font-poppins font-bold">
+            <a
+              href="#waitlist-input"
+              className="hover:bg-[#F1F5F9] border py-2 bg-white rounded-[5px] px-3 text-[14px] font-poppins font-bold"
+            >
               Join waitlist
-            </button>
+            </a>
           </article>
         </nav>
       </main>

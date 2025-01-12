@@ -7,7 +7,9 @@ export default function Home() {
     <>
       <Nav />
       <Wait />
-      <Footer />
+      <div className="">
+        <Footer />
+      </div>
     </>
   );
 }

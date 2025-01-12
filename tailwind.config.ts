@@ -18,7 +18,7 @@ module.exports = {
       },
       keyframes: {
         "color-change": {
-          "0%, 100%": { color: "#6898A6" },
+          "0%, 100%": { color: "#8A2BE2" },
           "50%": { color: "#A66898" }, // Intermediate color
         },
       },
