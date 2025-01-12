@@ -15,7 +15,7 @@ export default function Wait() {
     status: "success",
   });
 
-  // Toast function to show the toast
+  // Toast function to show the
   const showToast = (message: string, status: "success" | "error") => {
     setToast({ open: true, message, status });
   };
