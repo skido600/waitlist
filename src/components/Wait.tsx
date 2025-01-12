@@ -44,7 +44,7 @@ export default function Wait() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await response.json(); // Parse the response as JSON
+      const data = await response.json();
 
       if (response.ok) {
         showToast("Successfully joined the waitlist!", "success");
@@ -125,8 +125,6 @@ export default function Wait() {
                   ? "border-red-500 placeholder:text-red-500"
                   : "border-[#69748B] placeholder:text-[#69748B]"
               }`}
-              aria-invalid={!!error}
-              aria-describedby="email-error"
             />
 
             <button
