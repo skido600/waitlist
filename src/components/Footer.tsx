@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <main className="bg-[#2C3E50]  right-0 left-0 py-[3.1rem] ">
+      <main className="bg-[#2C3E50]  lg:relative right-0 left-0 py-[3.1rem] ">
         <div className="flex gap-x-4  justify-center font-inter">
           <div className="flex items-center gap-x-3 text-center ">
             <div>
