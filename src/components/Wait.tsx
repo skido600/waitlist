@@ -14,7 +14,8 @@ export default function Wait() {
     message: "",
     status: "success",
   });
-  //toats
+
+  // Toast function to show the toast
   const showToast = (message: string, status: "success" | "error") => {
     setToast({ open: true, message, status });
   };
@@ -43,20 +44,30 @@ export default function Wait() {
         body: JSON.stringify({ email }),
       });
 
+      const data = await response.json(); // Parse the response as JSON
+
       if (response.ok) {
         showToast("Successfully joined the waitlist!", "success");
-
         setEmail("");
+      } else if (response.status === 409) {
+        const errorMsg =
+          data?.error || "This email is already on our waitlist.";
+        setError(errorMsg);
+        showToast(errorMsg, "error");
+      } else if (response.status === 500) {
+        const errorMsg =
+          data?.error ||
+          "There was a problem adding your email. Please try again later.";
+        setError(errorMsg);
+        showToast(errorMsg, "error");
       } else {
-        const data = await response.json();
-        setError(data.message || "Something went wrong. Please try again.");
-        showToast(
-          `Something went wrong. Please try again.! ${data.message}`,
-          "error"
-        );
+        const errorMsg =
+          data?.message || "Something went wrong. Please try again.";
+        setError(errorMsg);
+        showToast(errorMsg, "error");
       }
     } catch (err) {
-      setError("An error occurred. Please try again later." + err);
+      setError("An error occurred. Please try again later.");
       showToast(`An error occurred. Please try again later. ${err}`, "error");
     } finally {
       setLoading(false);
@@ -66,7 +77,6 @@ export default function Wait() {
   return (
     <>
       <div className="h-[50rem] font-poppins w-full dark:bg-black dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex items-center justify-center">
-        {/* Radial gradient for the container */}
         <div className="absolute pointer-events-none flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
         <main className="text-center mb-8 w-[315px] md:w-[500px] lg:w-[680px] mt-12 sm:-mt-[2.5rem]">
           <div className="text-[70px] tracking-[-1px] font-bold mb-4 m-auto font-inter md:flex justify-center gap-x-4">
@@ -79,8 +89,8 @@ export default function Wait() {
             Unlock the potential of your creativity with
             <span className="text-[#00C8A3] font-bold underline decoration-wavy">
               {" "}
-              Gemini AI pro integration!
-            </span>{" "}
+              Gemini AI pro integration!{" "}
+            </span>
             A game-changer in writing technology!
           </p>
           <p className="text-[#69748B] mt-2 text-[14px]">
@@ -133,7 +143,8 @@ export default function Wait() {
           </article>
         </main>
       </div>
-      {/* schacnd fucking toast */}
+
+      {/* Toast component */}
       <Toast.Provider>
         <Toast.Root
           open={toast.open}
