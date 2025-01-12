@@ -36,7 +36,7 @@ export default function Wait() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/joinWaitlist", {
+      const response = await fetch("/api/joinWaitlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
