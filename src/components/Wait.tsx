@@ -47,7 +47,10 @@ export default function Wait() {
       const data = await response.json();
 
       if (response.ok) {
-        showToast("Successfully joined the waitlist!", "success");
+        showToast(
+          " Thank you for joining the waitlist! Check your email for updates.",
+          "success"
+        );
         setEmail("");
       } else if (response.status === 409) {
         const errorMsg =

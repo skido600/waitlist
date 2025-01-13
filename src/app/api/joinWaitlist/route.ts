@@ -9,24 +9,52 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+import nodemailer from "nodemailer";
+
+const emailHTML = `
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+      <div
+        style="font-family: Arial, sans-serif; line-height: 1.6; color: #333"
+      >
+        <h2 style="color: #4caf50; text-align: center">
+          Welcome to Our Waitlist!
+        </h2>
+        <p style="font-size: 16px; margin: 10px 0">
+          Thank you for joining our waitlist. Stay tuned for updates!
+        </p>
+        <p style="font-size: 14px; color: #555">
+          If you have any questions, feel free to reply to this email.
+        </p>
+        <footer
+          style="
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+          "
+        >
+          &copy; 2025 wave queue. All rights reserved.
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>
+
+`;
+
 // Email validation function
 const isValidEmail = (email: string): boolean =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-// Define your allowed origin
-// const ALLOWED_ORIGIN = "http://localhost:3000";
-
 export async function POST(request: Request) {
-  //   const origin = request.headers.get("origin");
-  //   console.log(origin);
-  // Check if the request comes from the allowed origin
-  //   if (origin !== ALLOWED_ORIGIN) {
-  //     return NextResponse.json(
-  //       { error: "Something went wrong." },
-  //       { status: 403 }
-  //     );
-  //   }
-
   try {
     const { email } = await request.json();
 
@@ -60,9 +88,27 @@ export async function POST(request: Request) {
       timestamp: serverTimestamp(),
     });
 
+    // Send a welcome email
+    const mailOptions = {
+      from: process.env.GMAIL_USERNAME,
+      to: email,
+      subject: `Welcome to Our Waitlist!`,
+      html: emailHTML,
+    };
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USERNAME,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail(mailOptions);
+
     return NextResponse.json(
       {
-        message: "Email added successfully!",
+        message: "Email added successfully and welcome email sent!",
       },
       { status: 200 }
     );
