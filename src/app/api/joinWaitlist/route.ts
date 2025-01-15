@@ -24,7 +24,7 @@ const emailHTML = `
       <div
         style="font-family: Arial, sans-serif; line-height: 1.6; color: #333"
       >
-        <h2 style="color: #4caf50; text-align: center">
+        <h2 style="color: #4635B1; text-align: center">
           Welcome to Our Waitlist!
         </h2>
         <p style="font-size: 16px; margin: 10px 0">
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     const mailOptions = {
       from: process.env.GMAIL_USERNAME,
       to: email,
-      subject: `Welcome to Our Waitlist!`,
+      subject: `Welcome to Our Waitlist! ${email}`,
       html: emailHTML,
     };
 
