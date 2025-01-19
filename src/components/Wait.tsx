@@ -3,12 +3,15 @@ import { useState } from "react";
 import { AnimatedTooltipPreview } from "@/components/AnimatedTooltipPreview";
 import * as Toast from "@radix-ui/react-toast";
 import Loader from "./helper/Loader";
+import { useWindowSize } from "react-use";
 
+import Confetti from "react-confetti";
 export default function Wait() {
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [confettiActive, setConfettiActive] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
   const [toast, setToast] = useState({
     open: false,
     message: "",
@@ -51,6 +54,9 @@ export default function Wait() {
           " Thank you for joining the waitlist! Check your email for updates.",
           "success"
         );
+        setConfettiActive(true);
+        setTimeout(() => setConfettiActive(false), 7000);
+
         setEmail("");
       } else if (response.status === 409) {
         const errorMsg =
@@ -79,6 +85,13 @@ export default function Wait() {
 
   return (
     <>
+      {confettiActive && (
+        <Confetti
+          width={width}
+          height={height}
+          colors={["#a855f7", "#7e22ce"]}
+        />
+      )}
       <div className="h-[50rem] font-poppins w-full dark:bg-black dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex items-center justify-center">
         <div className="absolute pointer-events-none flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
         <main className="text-center mb-8 w-[315px] md:w-[500px] lg:w-[680px] mt-12 sm:-mt-[2.5rem]">
@@ -119,7 +132,7 @@ export default function Wait() {
             </label>
             <input
               id="waitlist-input"
-              placeholder="Enter email to join (e.g., john@gmail.com)"
+              placeholder="Enter email to join "
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
